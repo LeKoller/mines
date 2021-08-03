@@ -5,7 +5,7 @@ const params = {
   borderSize: 6,
   fontSize: 24,
   headerRatio: 0.2,
-  difficultLevel: 0.2,
+  difficultLevel: 0.24,
 
   getColumnsAmount() {
     const width = Dimensions.get('window').width;

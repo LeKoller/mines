@@ -1,9 +1,10 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {StyleSheet, View, Alert} from 'react-native';
 
 import params from './src/params';
 import MineField from './src/components/MineField';
 import Header from './src/components/Header';
+import LevelSelection from './src/screens/LevelSelection';
 import {
   createMinedBoard,
   cloneBoard,
@@ -16,11 +17,17 @@ import {
 } from './src/functions';
 
 const App = () => {
+  const [difficulty, setDifficulty] = useState(params.difficultLevel);
+  const [won, setWon] = useState(false);
+  const [lost, setLost] = useState(false);
+  const [flagging, setFlagging] = useState(false);
+  const [showLevelSelection, setShowLevelSelection] = useState(false);
+
   const minesAmount = () => {
     const cols = params.getColumnsAmount();
     const rows = params.getRowsAmount();
 
-    return Math.ceil(cols * rows * params.difficultLevel);
+    return Math.ceil(cols * rows * difficulty);
   };
 
   const createNewBoard = () => {
@@ -31,9 +38,10 @@ const App = () => {
   };
 
   const [board, setBoard] = useState(createNewBoard());
-  const [won, setWon] = useState(false);
-  const [lost, setLost] = useState(false);
-  const [flagging, setFlagging] = useState(false);
+
+  useEffect(() => {
+    setBoard(createNewBoard());
+  }, [difficulty]);
 
   const doOpenField = (row, column) => {
     const boardClone = cloneBoard(board);
@@ -75,14 +83,26 @@ const App = () => {
     setWon(false);
   };
 
+  const selectLevel = level => {
+    setDifficulty(level);
+    // setShowLevelSelection(false);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.board}>
+        <LevelSelection
+          isVisible={showLevelSelection}
+          onLevelSelected={selectLevel}
+          onCancel={() => setShowLevelSelection(false)}
+          level={difficulty}
+        />
         <Header
           flagging={flagging}
           setFlagging={setFlagging}
           flagsLeft={minesAmount() - flagsUsed(board)}
           onNewGame={startNewGame}
+          onFlagPress={() => setShowLevelSelection(true)}
         />
         <MineField
           board={board}
