@@ -1,11 +1,11 @@
 import {Dimensions} from 'react-native';
 
 const params = {
-  blockSize: 40,
-  borderSize: 5,
-  fontSize: 20,
-  headerRatio: 0.15,
-  difficultLevel: 0.1,
+  blockSize: 48,
+  borderSize: 6,
+  fontSize: 24,
+  headerRatio: 0.2,
+  difficultLevel: 0.2,
 
   getColumnsAmount() {
     const width = Dimensions.get('window').width;

@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import {StyleSheet, View, Text, TouchableWithoutFeedback} from 'react-native';
 
 import params from '../params';
 import Flag from './Flag';
@@ -33,13 +33,15 @@ export default props => {
   }
 
   return (
-    <View style={styleFields}>
-      {!mined && opened && nearMines >= 0 && (
-        <Text style={[styles.label, {color: color}]}>{nearMines}</Text>
-      )}
-      {mined && opened && <Mine />}
-      {flagged && !opened && <Flag />}
-    </View>
+    <TouchableWithoutFeedback onPress={props.onOpen}>
+      <View style={styleFields}>
+        {!mined && opened && nearMines >= 0 && (
+          <Text style={[styles.label, {color: color}]}>{nearMines}</Text>
+        )}
+        {mined && opened && <Mine />}
+        {flagged && !opened && <Flag />}
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 
