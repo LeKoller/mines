@@ -39,7 +39,7 @@ export default props => {
           <Text style={[styles.label, {color: color}]}>{nearMines}</Text>
         )}
         {mined && opened && <Mine />}
-        {flagged && !opened && <Flag />}
+        {flagged && !opened && <Flag color="#3F0C1A" size={20} />}
       </View>
     </TouchableWithoutFeedback>
   );

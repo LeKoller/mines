@@ -1,8 +1,9 @@
-import React, {useState, useEffect} from 'react';
-import {StyleSheet, View, Alert, TouchableHighlight, Text} from 'react-native';
+import React, {useState} from 'react';
+import {StyleSheet, View, Alert} from 'react-native';
 
 import params from './src/params';
 import MineField from './src/components/MineField';
+import Header from './src/components/Header';
 import {
   createMinedBoard,
   cloneBoard,
@@ -11,6 +12,7 @@ import {
   wonGame,
   showMines,
   invertFlag,
+  flagsUsed,
 } from './src/functions';
 
 const App = () => {
@@ -21,35 +23,23 @@ const App = () => {
     return Math.ceil(cols * rows * params.difficultLevel);
   };
 
-  const createState = () => {
+  const createNewBoard = () => {
     const cols = params.getColumnsAmount();
     const rows = params.getRowsAmount();
 
     return createMinedBoard(rows, cols, minesAmount());
   };
 
-  const [board, setBoard] = useState(createState());
+  const [board, setBoard] = useState(createNewBoard());
   const [won, setWon] = useState(false);
   const [lost, setLost] = useState(false);
   const [flagging, setFlagging] = useState(false);
-  const [hitStyle, setHitStyle] = useState(styles.neonText);
-  const [flagStyle, setFlagStyle] = useState(styles.grayText);
-
-  useEffect(() => {
-    if (flagging) {
-      setFlagStyle(styles.neonText);
-      setHitStyle(styles.grayText);
-    } else {
-      setFlagStyle(styles.grayText);
-      setHitStyle(styles.neonText);
-    }
-  }, [flagging]);
 
   const doOpenField = (row, column) => {
     const boardClone = cloneBoard(board);
-    const didLost = hadExploded(boardClone);
-
     openField(boardClone, row, column);
+
+    const didLost = hadExploded(boardClone);
     winningCheck(boardClone);
 
     if (didLost) {
@@ -79,17 +69,21 @@ const App = () => {
     setWon(didWon);
   };
 
+  const startNewGame = () => {
+    setBoard(createNewBoard());
+    setLost(false);
+    setWon(false);
+  };
+
   return (
     <View style={styles.container}>
-      <View style={styles.control}>
-        <TouchableHighlight onPress={() => setFlagging(false)}>
-          <Text style={hitStyle}>Hit</Text>
-        </TouchableHighlight>
-        <TouchableHighlight onPress={() => setFlagging(true)}>
-          <Text style={flagStyle}>Flag</Text>
-        </TouchableHighlight>
-      </View>
       <View style={styles.board}>
+        <Header
+          flagging={flagging}
+          setFlagging={setFlagging}
+          flagsLeft={minesAmount() - flagsUsed(board)}
+          onNewGame={startNewGame}
+        />
         <MineField
           board={board}
           onOpenField={flagging ? doInvertFlag : doOpenField}
@@ -108,20 +102,6 @@ const styles = StyleSheet.create({
   board: {
     alignItems: 'center',
     marginBottom: 8,
-  },
-  control: {
-    flexGrow: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    alignItems: 'center',
-  },
-  neonText: {
-    color: 'green',
-    fontSize: 40,
-  },
-  grayText: {
-    color: '#444',
-    fontSize: 40,
   },
 });
 
