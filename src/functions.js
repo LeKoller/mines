@@ -79,7 +79,7 @@ const openField = (board, row, column) => {
 
   const field = board[row][column];
 
-  if (!field.opened) {
+  if (!field.opened && !field.flagged) {
     const neighbors = getNeighbors(board, row, column);
 
     field.opened = true;

@@ -10,7 +10,8 @@ export default props => {
 
   const styleFields = [styles.field];
   //
-  if (opened) styleFields.push(styles.opened);
+  if (opened && !mined) styleFields.push(styles.opened);
+  if (opened && mined) styleFields.push(styles.minedNotExploded);
   if (exploded) styleFields.push(styles.exploded);
   if (flagged) styleFields.push(styles.flagged);
   if (!opened) styleFields.push(styles.regular);
@@ -39,7 +40,7 @@ export default props => {
           <Text style={[styles.label, {color: color}]}>{nearMines}</Text>
         )}
         {mined && opened && <Mine />}
-        {flagged && !opened && <Flag color="#3F0C1A" size={20} />}
+        {flagged && !opened && <Flag color="#FF0067" size={20} />}
       </View>
     </TouchableWithoutFeedback>
   );
@@ -54,18 +55,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   regular: {
-    backgroundColor: '#3E5365',
-    borderLeftColor: '#5A6D7E',
-    borderTopColor: '#5A6D7E',
-    borderRightColor: '#192D3F',
-    borderBottomColor: '#192D3F',
+    backgroundColor: 'transparent',
+    borderColor: '#0CB6FF',
+    borderRadius: 12,
+    margin: 1,
   },
   opened: {
-    backgroundColor: '#192D3F',
-    borderLeftColor: '#0B1D2D',
-    borderTopColor: '#0B1D2D',
-    borderRightColor: '#3E5365',
-    borderBottomColor: '#3E5365',
+    backgroundColor: 'transparent',
+    borderColor: '#00FF67',
+    borderRadius: 12,
+    margin: 1,
   },
   label: {
     fontWeight: 'bold',
@@ -73,10 +72,15 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   exploded: {
-    backgroundColor: '#653441',
-    borderLeftColor: '#3F0C1A',
-    borderTopColor: '#3F0C1A',
-    borderRightColor: '#581E2E',
-    borderBottomColor: '#581E2E',
+    backgroundColor: 'transparent',
+    borderColor: '#FF3100',
+    borderRadius: 12,
+    margin: 1,
+  },
+  minedNotExploded: {
+    backgroundColor: 'transparent',
+    borderColor: '#FF8700',
+    borderRadius: 12,
+    margin: 1,
   },
 });
